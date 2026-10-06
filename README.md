@@ -35,9 +35,13 @@
 
 行程摘要集中呈现城市、日期、天数、预算和整体建议；每日行程则沿时间线展开景点、交通、住宿、餐饮与预约提示。
 
-| 行程摘要 | 每日行程 |
-| --- | --- |
-| ![行程摘要](docs/images/result-overview.png) | ![每日行程](docs/images/daily-itinerary.png) |
+#### 行程摘要
+
+![行程摘要](docs/images/result-overview.png)
+
+#### 每日行程
+
+![每日行程](docs/images/daily-itinerary.png)
 
 ### 把费用与天气放回决策现场
 
@@ -55,9 +59,9 @@
 - **旅行助手**：携带完整行程上下文继续问答，不必重复描述背景。
 - **攻略导出**：将摘要、日程、预算、天气和地图整理为可保存的长图。
 
-| 景点地图 | 灵感图谱 |
-| --- | --- |
-| ![景点地图](docs/images/attraction-map.png) | ![灵感图谱](docs/images/knowledge-graph.png) |
+### 景点地图
+
+![景点地图](docs/images/attraction-map.png)
 
 ## 当前产品思路
 

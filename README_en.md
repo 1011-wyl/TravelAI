@@ -33,9 +33,13 @@ The experience follows four actions:
 
 The summary brings cities, dates, duration, budget, and guidance together. The itinerary unfolds attractions, transport, accommodation, meals, and reservation reminders along a daily timeline.
 
-| Trip summary | Daily itinerary |
-| --- | --- |
-| ![Trip summary](docs/images/result-overview.png) | ![Daily itinerary](docs/images/daily-itinerary.png) |
+### Trip summary
+
+![Trip summary](docs/images/result-overview.png)
+
+### Daily itinerary
+
+![Daily itinerary](docs/images/daily-itinerary.png)
 
 Budget is not a fixed number appended after generation. Admission, hotels, meals, local transport, and inter-city travel can be reviewed and edited. Weather is organized by city and date with conditions and practical travel notes.
 
@@ -51,9 +55,9 @@ The result workspace also includes:
 - **Trip-aware assistant** — follow-up questions use the full itinerary as context.
 - **Long-image export** — combines the summary, itinerary, budget, weather, and map into a portable guide.
 
-| Attraction map | Inspiration graph |
-| --- | --- |
-| ![Attraction map](docs/images/attraction-map.png) | ![Inspiration graph](docs/images/knowledge-graph.png) |
+### Attraction map
+
+![Attraction map](docs/images/attraction-map.png)
 
 ## Product direction
 
