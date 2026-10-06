@@ -1,4 +1,4 @@
-# TripStar - AI Travel Agent
+# TravelAI - AI Travel Agent
 
 
 > **A Multi-Agent Collaborative Travel Planning Platform Based on the HelloAgents Framework**
@@ -20,13 +20,13 @@
 
 > [!IMPORTANT]
 > 
-> You can try the project directly online. For the full experience, you can deploy it locally. **Due to risk control, the online trial does not connect to Xiaohongshu (RED)**: [TripStar - AI Travel Agent](https://modelscope.cn/studios/lcclxy/Journey-to-the-China)
+> You can try the project directly online. For the full experience, you can deploy it locally. **Due to risk control, the online trial does not connect to Xiaohongshu (RED)**: [TravelAI - AI Travel Agent](https://modelscope.cn/studios/lcclxy/Journey-to-the-China)
 > 
 > Features include: Travel Plans, Attraction Maps Overview, Budget Details, Daily Itinerary: Itinerary Description, Transportation, Accommodation Recommendations, Attraction Scheduling (address, duration, description, reservation reminders), Dining Plans, Weather Information, Knowledge Graph Visualization, Immersive AI Q&A Companion...
 
 ## Project Introduction
 
-**TripStar** is an innovative AI travel agent application, a multi-agent collaborative travel planning platform based on the HelloAgents framework, designed to solve the "information overload" and "decision fatigue" users face when planning trips.
+**TravelAI** is an innovative AI travel agent application, a multi-agent collaborative travel planning platform based on the HelloAgents framework, designed to solve the "information overload" and "decision fatigue" users face when planning trips.
 
 Unlike traditional travel guide websites, this project adopts an innovative model based on **Large Language Models (LLM)** and **Multi-Agent** collaboration. Like an experienced human travel butler, it comprehensively considers users' personalized needs (preferences: transportation, accommodation style, travel interests, special requests, etc.), automatically searching for travel info, checking local weather, curating hotels, and planning optimal attraction routes to **quickly generate a travel itinerary**.
 
@@ -41,7 +41,7 @@ Unlike traditional travel guide websites, this project adopts an innovative mode
 * **Knowledge Graph Visualization**: Real-time conversion of generated itinerary data into a node-relationship graph, intuitively displaying the spatial structure of "City - Days - Itinerary Nodes - Budget".
 * **Immersive AI Q&A Companion**: After generating the report, provides a floating AI Q&A window (bottom left). The AI retains complete contextual memory of the itinerary, allowing users to ask follow-up questions at any time regarding itinerary details (like ticket prices, or suitability).
 * **Multi-City Trip Planning**: Plan trips spanning multiple cities in one journey. Dynamically add cities with individual stay durations, and the system auto-calculates the total travel days. Inter-city transfer days are smartly annotated with transportation suggestions, the budget panel tracks inter-city transport costs separately, the weather panel displays forecasts per city, and the knowledge graph renders the full multi-city route topology.
-* **User Preference Memory**: Built-in weighted per-user travel preference memory with decay and TOP-K recall. When enabled, TripStar extracts stable preferences after successful itinerary generation, scores and stores them, then injects high-weight memories into future Agent prompts so recommendations become more aligned with the user's habits.
+* **User Preference Memory**: Built-in weighted per-user travel preference memory with decay and TOP-K recall. When enabled, TravelAI extracts stable preferences after successful itinerary generation, scores and stores them, then injects high-weight memories into future Agent prompts so recommendations become more aligned with the user's habits.
 * **Luxury Dark Glassmorphism Design**: A completely redesigned Dark Luxury Glassmorphism UI, offering a highly immersive, premium visual experience.
 
 ---
@@ -264,7 +264,7 @@ npm run dev
 ## Directory Structure
 
 ```text
-TripStar/
+TravelAI/
 ├── backend/                       # Python FastAPI Backend
 │   ├── app/
 │   │   ├── api/routes/            # Core routing (trip.py, poi.py, chat.py)
@@ -326,4 +326,4 @@ TripStar/
 
 
 ## 🙏 Acknowledgements
-Thanks to the [linux.do](https://linux.do/) community for communication and feedback, making TripStar iterate more efficiently.
+Thanks to the [linux.do](https://linux.do/) community for communication and feedback, making TravelAI iterate more efficiently.

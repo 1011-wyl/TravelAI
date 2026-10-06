@@ -1,0 +1,262 @@
+.trip-export-host {
+  position: absolute;
+  left: -12000px;
+  top: 0;
+  width: 800px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.trip-export-doc {
+  box-sizing: border-box;
+  width: 800px;
+  padding: 30px;
+  background: #f5f7f2;
+  color: #16302b;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  line-height: 1.55;
+}
+
+.trip-export-doc *,
+.trip-export-doc *::before,
+.trip-export-doc *::after {
+  box-sizing: border-box;
+  animation: none !important;
+  transition: none !important;
+}
+
+.trip-export-doc__header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.trip-export-doc__title {
+  margin: 0;
+  font-size: 28px;
+  color: #16302b;
+}
+
+.trip-export-doc__subtitle,
+.trip-export-doc__suggest {
+  margin: 6px auto 0;
+  font-size: 14px;
+  color: #5d726d;
+}
+
+.trip-export-doc__suggest {
+  max-width: 600px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.trip-export-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 10px rgba(22, 48, 43, 0.06);
+}
+
+.trip-export-card__title {
+  margin: 0 0 14px;
+  color: #147d72;
+  font-size: 18px;
+}
+
+.trip-export-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.trip-export-metric {
+  flex: 1;
+  min-width: 120px;
+  background: #eaf1ed;
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.trip-export-metric__label {
+  font-size: 12px;
+  color: #5d726d;
+}
+
+.trip-export-metric__value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #16302b;
+}
+
+.trip-export-total {
+  background: #147d72;
+  color: #ffffff;
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+.trip-export-total strong {
+  font-size: 26px;
+}
+
+.trip-export-map {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
+
+.trip-export-day__meta {
+  font-size: 14px;
+  color: #5d726d;
+  margin-left: 8px;
+}
+
+.trip-export-attractions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.trip-export-stop {
+  flex: 0 0 48%;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(22, 48, 43, 0.07);
+  margin-bottom: 14px;
+}
+
+.trip-export-stop__photo {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #eaf1ed;
+}
+
+.trip-export-stop__placeholder {
+  width: 100%;
+  min-height: 80px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: #d8efeb;
+  color: #147d72;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  padding: 12px;
+}
+
+.trip-export-stop__name {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: #16302b;
+}
+
+.trip-export-stop__line {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #5d726d;
+}
+
+.trip-export-meals {
+  margin-top: 10px;
+}
+
+.trip-export-meals__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.trip-export-meal {
+  background: #fff7e8;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #16302b;
+}
+
+.trip-export-hotel {
+  background: #eaf1ed;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.trip-export-hotel__price {
+  float: right;
+  color: #c84531;
+  font-weight: 700;
+}
+
+.trip-export-weather {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.trip-export-weather__card {
+  flex: 1;
+  min-width: 180px;
+  background: #eaf1ed;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.trip-export-weather__date {
+  text-align: center;
+  color: #147d72;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.trip-export-weather__label {
+  font-size: 12px;
+  color: #5d726d;
+}
+
+.trip-export-footer {
+  text-align: center;
+  padding: 24px 16px 16px;
+  border-top: 1px solid #cad8d3;
+  margin-top: 8px;
+}
+
+.trip-export-footer__qr {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 10px;
+}
+
+.trip-export-footer__brand {
+  font-size: 13px;
+  color: #147d72;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.trip-export-footer__url,
+.trip-export-footer__note {
+  font-size: 11px;
+  color: #5d726d;
+}
+
+.trip-export-map-host {
+  width: 800px;
+  height: 420px;
+  background: #eaf1ed;
+}

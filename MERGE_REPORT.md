@@ -1,12 +1,12 @@
-# 合并优化报告：以 TripStar 为主干，吸收 Hello-Travel 的工程化改进
+# 合并优化报告：以 TravelAI 为主干，吸收 Hello-Travel 的工程化改进
 
 > 本报告记录一次「双项目合并 + 缺陷修复 + 工程化加固」的完整过程。
 > 合并对象：
 >
-> - **主干（Base）**：[1sdv/TripStar（旅途星辰）](https://github.com/1sdv/TripStar) —— 功能更完整、迭代更成熟
+> - **主干（Base）**：[1sdv/TripStar（TravelAI）](https://github.com/1sdv/TripStar) —— 功能更完整、迭代更成熟
 > - **改进来源**：[LinJJ12/Hello-Travel](https://github.com/LinJJ12/Hello-Travel) —— 同属 HelloAgents 框架，工程化程度更高
 >
-> 合并方向：**以 TripStar 为基座**，把 Hello-Travel 的工程化改进移植进来，并修复主干中发现的真实缺陷。
+> 合并方向：**以 TravelAI 为基座**，把 Hello-Travel 的工程化改进移植进来，并修复主干中发现的真实缺陷。
 
 ---
 
@@ -14,7 +14,7 @@
 
 两个项目是「同源不同侧重」的：
 
-| 维度 | TripStar | Hello-Travel |
+| 维度 | TravelAI | Hello-Travel |
 | --- | --- | --- |
 | 版本 | v2.1.0 | — |
 | 后端规模 | ~5,478 行 | ~2,811 行 |
@@ -22,11 +22,11 @@
 | 功能完整度 | 高（多城市、知识图谱、伴游问答、预约提醒、双地图引擎、多语言） | 中 |
 | 工程化程度 | 低（散落 `print`、裸 dict 任务表、脆弱的 JSON 解析、无测试） | 高（`app/core/` 基础设施层、37 个测试、ruff 全绿、Docker 工程化） |
 
-TripStar 的**业务价值更高**，Hello-Travel 的**工程质量更高**。因此最优解不是二选一，而是以 TripStar 为基座、把 Hello-Travel 的工程化能力移植过去。
+TravelAI 的**业务价值更高**，Hello-Travel 的**工程质量更高**。因此最优解不是二选一，而是以 TravelAI 为基座、把 Hello-Travel 的工程化能力移植过去。
 
 ---
 
-## 二、合并前的诊断：TripStar 侧发现的真实缺陷
+## 二、合并前的诊断：TravelAI 侧发现的真实缺陷
 
 合并的第一步不是「抄代码」，而是先确认主干到底缺什么。逐文件比对后，发现以下**必然报错**的问题：
 
@@ -54,7 +54,7 @@ TripStar 的**业务价值更高**，Hello-Travel 的**工程质量更高**。�
 
 ## 三、合并策略
 
-采用「**分层移植**」而非「整目录替换」：只把 Hello-Travel 中**与工程化相关、与业务无关**的部分搬过来，业务逻辑一律沿用 TripStar 的实现。
+采用「**分层移植**」而非「整目录替换」：只把 Hello-Travel 中**与工程化相关、与业务无关**的部分搬过来，业务逻辑一律沿用 TravelAI 的实现。
 
 ```text
 backend/app/
@@ -65,7 +65,7 @@ backend/app/
 │   ├── json_utils.py         多级降级 JSON 解析
 │   ├── job_store.py          TTL + 容量上限任务存储
 │   └── constants.py          错误码 / 超时 / 重试常量
-├── config.py             ← ② 合并（保留 TripStar 运行时配置能力 + 吸收日志与环境判定）
+├── config.py             ← ② 合并（保留 TravelAI 运行时配置能力 + 吸收日志与环境判定）
 ├── api/main.py           ← ② 合并（保留代理中间件/SPA 托管 + 吸收 lifespan/全局异常处理）
 ├── services/amap_service.py ← ③ 替换（用真实 REST 实现替换 MCP 桩）
 ├── services/xhs_sign/sign_util.py ← ③ 改造（导入期编译 → 惰性加载）
@@ -92,7 +92,7 @@ backend/app/
 
 ### 4.2 合并：`config.py`
 
-保留 TripStar 的**运行时配置**能力（前端设置页热更新 + 密钥掩码 + 持久化到 `runtime_settings.json`），叠加 Hello-Travel 的工程化字段：
+保留 TravelAI 的**运行时配置**能力（前端设置页热更新 + 密钥掩码 + 持久化到 `runtime_settings.json`），叠加 Hello-Travel 的工程化字段：
 
 - 新增 `setup_logging` / `get_logger` 接入点；
 - 新增 `environment`（默认 `local`）与 `docs_enabled` 属性；
@@ -103,7 +103,7 @@ backend/app/
 
 ### 4.3 合并：`api/main.py`
 
-保留 TripStar 的两项部署适配：
+保留 TravelAI 的两项部署适配：
 
 - `intercept_proxy_path` 中间件（兼容云平台在路径前拼接动态 ID 的代理）；
 - 前端构建产物存在时由后端直接托管 SPA（单容器部署）。
@@ -117,7 +117,7 @@ backend/app/
 
 ### 4.4 替换：`services/amap_service.py`（本次最大收益）
 
-TripStar 的 `AmapService` 是 MCP 桩，全部方法返回空。改为直连 `https://restapi.amap.com` 的真实 REST 实现：
+TravelAI 的 `AmapService` 是 MCP 桩，全部方法返回空。改为直连 `https://restapi.amap.com` 的真实 REST 实现：
 
 | 方法 | 说明 |
 | --- | --- |
@@ -183,7 +183,7 @@ TripStar 的 `AmapService` 是 MCP 桩，全部方法返回空。改为直连 `h
 
 ### 4.10 部署
 
-- `Dockerfile`：保留 TripStar 的「前端构建 → 后端托管 SPA」单镜像形态（运行时仍需 Node.js 执行小红书签名引擎、需要 `uvx` 启动 `amap-mcp-server`），吸收 Hello-Travel 的容器改进 —— 依赖层前置利用缓存、非 root 用户运行、内置 `HEALTHCHECK`；
+- `Dockerfile`：保留 TravelAI 的「前端构建 → 后端托管 SPA」单镜像形态（运行时仍需 Node.js 执行小红书签名引擎、需要 `uvx` 启动 `amap-mcp-server`），吸收 Hello-Travel 的容器改进 —— 依赖层前置利用缓存、非 root 用户运行、内置 `HEALTHCHECK`；
 - `docker-compose.yaml`：单服务编排，端口 `7860`，`trip_data` 卷持久化历史任务 / 图片缓存 / 记忆库；
 - `.dockerignore`：排除 `node_modules`、`.venv`、`tests`、`data`、`runtime_settings.json`、`.env`、`.git` 等；
 - `.env.example`：补充 `PORT`、`ENVIRONMENT`、`LOG_LEVEL`、`AMAP_CACHE_TTL`。
@@ -194,7 +194,7 @@ TripStar 的 `AmapService` 是 MCP 桩，全部方法返回空。改为直连 `h
 
 ### 5.1 「只告警不抛错」的配置校验
 
-Hello-Travel 原本在缺少密钥时**直接抛错**，这在「密钥只能来自环境变量」的前提下是合理的。但 TripStar 的密钥可以在前端设置页运行时填写 —— 如果启动即校验失败，用户根本进不去设置页。**结论**：`validate_config` 改为只记录 `warning`。
+Hello-Travel 原本在缺少密钥时**直接抛错**，这在「密钥只能来自环境变量」的前提下是合理的。但 TravelAI 的密钥可以在前端设置页运行时填写 —— 如果启动即校验失败，用户根本进不去设置页。**结论**：`validate_config` 改为只记录 `warning`。
 
 ### 5.2 `get_settings()` 不能用 `lru_cache`
 
@@ -223,9 +223,9 @@ Hello-Travel 原本在缺少密钥时**直接抛错**，这在「密钥只能来
 
 | 项 | 原因 |
 | --- | --- |
-| Hello-Travel 的 `composables/useAMap.ts`、`utils/*`、`config/theme.ts` | 这些是为 Hello-Travel 自己的视图结构定制的；TripStar 的前端结构（`Landing.vue` / `Result.vue` 等）与设计体系不同，强行移植会引入大面积回归。前端只移植**与业务无关的构建/依赖层改进**（按需引入、favicon、chunk 划分）。 |
-| Hello-Travel 的 `unsplash_service.py` | TripStar 使用小红书作为图源，功能已覆盖，无需引入额外依赖。 |
-| Hello-Travel 的 `scripts/` 调试脚本 | 属于一次性排查工具，与 TripStar 的代码结构不匹配。 |
+| Hello-Travel 的 `composables/useAMap.ts`、`utils/*`、`config/theme.ts` | 这些是为 Hello-Travel 自己的视图结构定制的；TravelAI 的前端结构（`Landing.vue` / `Result.vue` 等）与设计体系不同，强行移植会引入大面积回归。前端只移植**与业务无关的构建/依赖层改进**（按需引入、favicon、chunk 划分）。 |
+| Hello-Travel 的 `unsplash_service.py` | TravelAI 使用小红书作为图源，功能已覆盖，无需引入额外依赖。 |
+| Hello-Travel 的 `scripts/` 调试脚本 | 属于一次性排查工具，与 TravelAI 的代码结构不匹配。 |
 | 前端 ECharts 模块化引入 | 需要真实浏览器验证才能确认无回归，沙箱内无法完成；保留 `import * as echarts from 'echarts'` 更稳妥。 |
 
 ---
@@ -238,13 +238,13 @@ Hello-Travel 原本在缺少密钥时**直接抛错**，这在「密钥只能来
 4. **可观测性**：接入 OpenTelemetry 或结构化日志采集，补充指标与链路追踪。
 5. **限流与鉴权**：为对外 API 增加速率限制与 API Key 校验。
 6. **前端组件拆分**：`Result.vue`（约 2,900 行）可拆出 `DayBoard`、`WeatherPanel`、`BudgetRail` 等子组件。
-7. **前端 `onUnmounted` 清理**：核查地图实例、`setInterval` 在组件卸载时的销毁情况（TripStar 侧尚未系统排查）。
+7. **前端 `onUnmounted` 清理**：核查地图实例、`setInterval` 在组件卸载时的销毁情况（TravelAI 侧尚未系统排查）。
 
 ---
 
 ## 八、合并前后对比
 
-| 维度 | 合并前（TripStar v2.1.0） | 合并后（v2.2.0） |
+| 维度 | 合并前（TravelAI v2.1.0） | 合并后（v2.2.0） |
 | --- | --- | --- |
 | `/api/map/*` 可用性 | **静默失效**（返回空数据） | 真实 REST 实现，带缓存与重试 |
 | `/api/map/health` | 必然 500 | 正常，返回配置状态与缓存条目数 |

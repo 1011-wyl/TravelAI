@@ -1,545 +1,399 @@
 <template>
-  <nav class="navbar navbar-toggleable-md fixed-top navbar-transparent landing-navbar">
-    <div class="container">
-      <div class="navbar-translate">
-        <button
-          class="navbar-toggler navbar-toggler-right navbar-burger landing-burger"
-          type="button"
-          aria-label="Toggle navigation"
+  <header class="app-header" :class="{ 'is-solid': isSolid }">
+    <div class="app-header__inner">
+      <button type="button" class="app-brand" @click="onBrandClick">
+        <span class="app-brand__route" aria-hidden="true">
+          <span class="app-brand__node"></span>
+          <span class="app-brand__line"></span>
+          <span class="app-brand__node app-brand__node--end"></span>
+        </span>
+        <span class="app-brand__name">{{ t('app.brand') }}</span>
+      </button>
+
+      <nav class="app-header__nav" :aria-label="t('app.nav.primary')">
+        <RouterLink to="/" class="app-header__link" :aria-current="isLanding ? 'page' : undefined">
+          {{ t('app.nav.plan') }}
+        </RouterLink>
+        <RouterLink to="/result" class="app-header__link" :aria-current="isResult ? 'page' : undefined">
+          {{ t('app.nav.trips') }}
+        </RouterLink>
+      </nav>
+
+      <div class="app-header__actions">
+        <a
+          class="app-icon-btn app-header__wide-only"
+          href="https://github.com/1sdv/TripStar"
+          target="_blank"
+          rel="noreferrer"
+          :aria-label="t('app.nav.github')"
         >
-          <span class="navbar-toggler-bar"></span>
-          <span class="navbar-toggler-bar"></span>
-          <span class="navbar-toggler-bar"></span>
+          <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+
+        <label class="sr-only" for="app-language-select">{{ t('app.language.label') }}</label>
+        <a-select
+          id="app-language-select"
+          v-model:value="locale"
+          class="app-lang"
+          size="middle"
+          :aria-label="t('app.language.label')"
+        >
+          <a-select-option value="zh-CN">{{ t('app.language.zh') }}</a-select-option>
+          <a-select-option value="ja-JP">{{ t('app.language.ja') }}</a-select-option>
+          <a-select-option value="en-US">{{ t('app.language.en') }}</a-select-option>
+        </a-select>
+
+        <span class="app-header__wide-only">
+          <a-dropdown trigger="click" placement="bottomRight">
+            <button type="button" class="app-icon-btn" :aria-label="t('app.appearance.theme')">
+              {{ themeShort }}
+            </button>
+            <template #overlay>
+              <a-menu :selected-keys="[themePreference]" @click="onThemeMenu">
+                <a-menu-item key="system">{{ t('app.appearance.themeSystem') }}</a-menu-item>
+                <a-menu-item key="light">{{ t('app.appearance.themeLight') }}</a-menu-item>
+                <a-menu-item key="dark">{{ t('app.appearance.themeDark') }}</a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </span>
+
+        <span class="app-header__wide-only">
+          <a-dropdown trigger="click" placement="bottomRight">
+            <button type="button" class="app-icon-btn" :aria-label="t('app.appearance.motion')">
+              {{ motionShort }}
+            </button>
+            <template #overlay>
+              <a-menu :selected-keys="[motionPreference]" @click="onMotionMenu">
+                <a-menu-item key="system">{{ t('app.appearance.motionSystem') }}</a-menu-item>
+                <a-menu-item key="reduce">{{ t('app.appearance.motionReduce') }}</a-menu-item>
+                <a-menu-item key="full">{{ t('app.appearance.motionFull') }}</a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </span>
+
+        <span ref="settingsTrigger">
+          <AppIconButton
+            :ariaLabel="t('settings.open')"
+            :tooltip="t('settings.open')"
+            @click="openSettings"
+          >
+            <svg width="20" height="20" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+              <path fill="currentColor" d="M600.704 64a32 32 0 0 1 30.464 22.208l35.2 109.376c14.784 7.232 28.928 15.36 42.432 24.512l112.384-24.192a32 32 0 0 1 34.432 15.36L944.32 364.8a32 32 0 0 1-4.032 37.504l-77.12 85.12a357.12 357.12 0 0 1 0 49.024l77.12 85.248a32 32 0 0 1 4.032 37.504l-88.704 153.6a32 32 0 0 1-34.432 15.296L708.8 803.904c-13.44 9.088-27.648 17.28-42.368 24.512l-35.264 109.376A32 32 0 0 1 600.704 960H423.296a32 32 0 0 1-30.464-22.208L357.696 828.48a351.616 351.616 0 0 1-42.56-24.64l-112.32 24.256a32 32 0 0 1-34.432-15.36L79.68 659.2a32 32 0 0 1 4.032-37.504l77.12-85.248a357.12 357.12 0 0 1 0-48.896l-77.12-85.248A32 32 0 0 1 79.68 364.8l88.704-153.6a32 32 0 0 1 34.432-15.296l112.32 24.256c13.568-9.152 27.776-17.408 42.56-24.64l35.2-109.312A32 32 0 0 1 423.232 64H600.64zM512 320a192 192 0 1 1 0 384 192 192 0 0 1 0-384z"/>
+            </svg>
+          </AppIconButton>
+        </span>
+
+        <AppButton class="app-cta" variant="primary" @click="onCtaClick">
+          {{ t('home.nav.cta') }}
+        </AppButton>
+
+        <button
+          ref="menuTrigger"
+          type="button"
+          class="app-icon-btn app-menu-trigger"
+          :aria-expanded="menuOpen"
+          aria-controls="mobile-nav-drawer"
+          :aria-label="t('app.nav.openMenu')"
+          @click="menuOpen = true"
+        >
+          <span class="app-menu-trigger__bar"></span>
+          <span class="app-menu-trigger__bar"></span>
+          <span class="app-menu-trigger__bar"></span>
         </button>
-        <button class="navbar-brand landing-brand" type="button" @click="handleBrandClick">TripStar</button>
-      </div>
-      <div class="navbar-collapse landing-navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav ml-auto landing-nav">
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              rel="tooltip"
-              title="Star on GitHub"
-              data-placement="bottom"
-              href="https://github.com/1sdv/TripStar"
-              target="_blank"
-              style="display:inline-flex;align-items:center;gap:6px;"
-            >
-              <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-              </svg>
-            </a>
-          </li>
-          <li class="nav-item">
-            <!-- <button class="nav-link landing-nav-btn fog-toggle" type="button" :aria-pressed="fogEnabled" @click="toggleFog">
-              {{ fogEnabled ? t('home.nav.fogOn') : t('home.nav.fogOff') }}
-            </button> -->
-          </li>
-          <li class="nav-item landing-lang-item">
-            <a-select v-model:value="locale" class="lang-select-nav" size="small" :aria-label="t('app.language.label')">
-              <a-select-option value="zh-CN">{{ t('app.language.zh') }}</a-select-option>
-              <a-select-option value="ja-JP">{{ t('app.language.ja') }}</a-select-option>
-              <a-select-option value="en-US">{{ t('app.language.en') }}</a-select-option>
-            </a-select>
-          </li>
-          <li class="nav-item">
-            <button
-              type="button"
-              class="nav-link landing-nav-btn settings-btn"
-              :title="t('settings.open')"
-              :aria-label="t('settings.open')"
-              @click="openSettingsDialog"
-            >
-              <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M600.704 64a32 32 0 0 1 30.464 22.208l35.2 109.376c14.784 7.232 28.928 15.36 42.432 24.512l112.384-24.192a32 32 0 0 1 34.432 15.36L944.32 364.8a32 32 0 0 1-4.032 37.504l-77.12 85.12a357.12 357.12 0 0 1 0 49.024l77.12 85.248a32 32 0 0 1 4.032 37.504l-88.704 153.6a32 32 0 0 1-34.432 15.296L708.8 803.904c-13.44 9.088-27.648 17.28-42.368 24.512l-35.264 109.376A32 32 0 0 1 600.704 960H423.296a32 32 0 0 1-30.464-22.208L357.696 828.48a351.616 351.616 0 0 1-42.56-24.64l-112.32 24.256a32 32 0 0 1-34.432-15.36L79.68 659.2a32 32 0 0 1 4.032-37.504l77.12-85.248a357.12 357.12 0 0 1 0-48.896l-77.12-85.248A32 32 0 0 1 79.68 364.8l88.704-153.6a32 32 0 0 1 34.432-15.296l112.32 24.256c13.568-9.152 27.776-17.408 42.56-24.64l35.2-109.312A32 32 0 0 1 423.232 64H600.64zm-23.424 64H446.72l-36.352 113.088-24.512 11.968a294.113 294.113 0 0 0-34.816 20.096l-22.656 15.36-116.224-25.088-65.28 113.152 79.68 88.192-1.92 27.136a293.12 293.12 0 0 0 0 40.192l1.92 27.136-79.808 88.192 65.344 113.152 116.224-25.024 22.656 15.296a294.113 294.113 0 0 0 34.816 20.096l24.512 11.968L446.72 896h130.688l36.48-113.152 24.448-11.904a288.282 288.282 0 0 0 34.752-20.096l22.592-15.296 116.288 25.024 65.28-113.152-79.744-88.192 1.92-27.136a293.12 293.12 0 0 0 0-40.256l-1.92-27.136 79.808-88.128-65.344-113.152-116.288 24.96-22.592-15.232a287.616 287.616 0 0 0-34.752-20.096l-24.448-11.904L577.344 128zM512 320a192 192 0 1 1 0 384 192 192 0 0 1 0-384zm0 64a128 128 0 1 0 0 256 128 128 0 0 0 0-256z"/></svg>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button type="button" class="btn btn-danger btn-round landing-cta" @click="handleCtaClick">
-              {{ t('home.nav.cta') }}
-            </button>
-          </li>
-        </ul>
       </div>
     </div>
-    <a-modal
-      v-model:open="settingsVisible"
-      class="settings-modal"
-      :title="t('settings.title')"
-      :width="820"
-      :confirm-loading="settingsSaving"
-      :ok-text="t('settings.saveApply')"
-      :cancel-text="t('settings.cancel')"
-      @ok="saveSettingsNow"
-    >
-      <a-spin :spinning="settingsLoading">
-        <section class="runtime-settings-panel">
 
-          <a-form layout="vertical" class="runtime-settings-form">
-            <div class="runtime-settings-grid">
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.apiBaseUrl') }}</span>
-                </template>
-                <a-input
-                  v-model:value="settingsForm.api_base_url"
-                  :placeholder="t('settings.placeholders.apiBaseUrl')"
-                  allow-clear
-                />
-              </a-form-item>
-
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.amapJsKey') }}</span>
-                </template>
-                <a-input-password v-model:value="settingsForm.vite_amap_web_js_key" allow-clear />
-              </a-form-item>
-
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.amapWebKey') }}</span>
-                </template>
-                <a-input-password v-model:value="settingsForm.vite_amap_web_key" allow-clear />
-              </a-form-item>
-
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.googleMapsApiKey') }}</span>
-                </template>
-                <a-input-password
-                  v-model:value="settingsForm.google_maps_api_key"
-                  :placeholder="t('settings.placeholders.googleMapsApiKey')"
-                  allow-clear
-                />
-              </a-form-item>
-
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.googleMapsProxy') }}</span>
-                </template>
-                <a-input
-                  v-model:value="settingsForm.google_maps_proxy"
-                  :placeholder="t('settings.placeholders.googleMapsProxy')"
-                  allow-clear
-                />
-              </a-form-item>
-
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.openaiBaseUrl') }}</span>
-                </template>
-                <a-input
-                  v-model:value="settingsForm.openai_base_url"
-                  :placeholder="t('settings.placeholders.openaiBaseUrl')"
-                  allow-clear
-                />
-              </a-form-item>
-
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.openaiModel') }}</span>
-                </template>
-                <a-input
-                  v-model:value="settingsForm.openai_model"
-                  :placeholder="t('settings.placeholders.openaiModel')"
-                  allow-clear
-                />
-              </a-form-item>
-
-              <a-form-item>
-                <template #label>
-                  <span class="field-label">{{ t('settings.labels.openaiApiKey') }}</span>
-                </template>
-                <a-input-password v-model:value="settingsForm.openai_api_key" allow-clear />
-              </a-form-item>
-            </div>
-
-            <a-form-item class="runtime-settings-full">
-              <template #label>
-                <span class="field-label">{{ t('settings.labels.xhsCookie') }}</span>
-              </template>
-              <a-textarea
-                v-model:value="settingsForm.xhs_cookie"
-                :rows="4"
-                :placeholder="t('settings.placeholders.xhsCookie')"
-                allow-clear
-              />
-            </a-form-item>
-          </a-form>
-        </section>
-      </a-spin>
-    </a-modal>
-  </nav>
+    <MobileNavDrawer :open="menuOpen" @close="closeMenu" @cta="onMobileCta" @settings="openSettingsFromMenu" />
+    <SettingsDrawer :open="settingsOpen" @close="closeSettings" />
+  </header>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import { message } from 'ant-design-vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import type { RuntimeSettings } from '@/types'
-import { getRuntimeSettings, saveRuntimeSettings } from '@/services/api'
+import { useTheme } from '@/composables/useTheme'
+import { useMotionPreference } from '@/composables/useMotionPreference'
+import MobileNavDrawer from '@/components/layout/MobileNavDrawer.vue'
+import SettingsDrawer from '@/components/settings/SettingsDrawer.vue'
+import AppButton from '@/components/ui/AppButton.vue'
+import AppIconButton from '@/components/ui/AppIconButton.vue'
+import { OPEN_SETTINGS_EVENT } from '@/composables/useTravelMap'
+import type { MotionPreference, ThemePreference } from '@/theme/preferences'
 
 const { t, locale } = useI18n()
-const settingsVisible = ref(false)
-const settingsLoading = ref(false)
-const settingsSaving = ref(false)
-const settingsForm = reactive<RuntimeSettings>({
-  api_base_url: '',
-  vite_amap_web_key: '',
-  vite_amap_web_js_key: '',
-  google_maps_api_key: '',
-  google_maps_proxy: '',
-  xhs_cookie: '',
-  openai_api_key: '',
-  openai_base_url: '',
-  openai_model: '',
+const route = useRoute()
+const router = useRouter()
+const { themePreference, setThemePreference } = useTheme()
+const { motionPreference, setMotionPreference, reduceMotion } = useMotionPreference()
+
+const isSolid = ref(false)
+const menuOpen = ref(false)
+const menuTrigger = ref<HTMLButtonElement | null>(null)
+const settingsTrigger = ref<HTMLElement | null>(null)
+const settingsOpen = ref(false)
+
+const isLanding = computed(() => route.path === '/')
+const isResult = computed(() => route.path === '/result')
+const themeShort = computed(() => {
+  if (themePreference.value === 'light') return 'Aa'
+  if (themePreference.value === 'dark') return 'A'
+  return 'Auto'
+})
+const motionShort = computed(() => {
+  if (motionPreference.value === 'reduce') return '–'
+  if (motionPreference.value === 'full') return '≈'
+  return 'Sys'
 })
 
-const emit = defineEmits<{
-  (e: 'brand-click'): void
-  (e: 'cta-click'): void
-}>()
-
-const handleBrandClick = () => {
-  emit('brand-click')
+const updateSolid = () => {
+  isSolid.value = window.scrollY > 24
 }
 
-const handleCtaClick = () => {
-  emit('cta-click')
+onMounted(() => {
+  updateSolid()
+  window.addEventListener('scroll', updateSolid, { passive: true })
+  window.addEventListener(OPEN_SETTINGS_EVENT, openSettings)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', updateSolid)
+  window.removeEventListener(OPEN_SETTINGS_EVENT, openSettings)
+})
+
+const onBrandClick = () => {
+  void router.push('/')
+  window.scrollTo({ top: 0, behavior: reduceMotion.value ? 'auto' : 'smooth' })
 }
 
-const applyRuntimeSettings = (settings: RuntimeSettings) => {
-  settingsForm.api_base_url = settings.api_base_url || ''
-  settingsForm.vite_amap_web_key = settings.vite_amap_web_key || ''
-  settingsForm.vite_amap_web_js_key = settings.vite_amap_web_js_key || ''
-  settingsForm.google_maps_api_key = settings.google_maps_api_key || ''
-  settingsForm.google_maps_proxy = settings.google_maps_proxy || ''
-  settingsForm.xhs_cookie = settings.xhs_cookie || ''
-  settingsForm.openai_api_key = settings.openai_api_key || ''
-  settingsForm.openai_base_url = settings.openai_base_url || ''
-  settingsForm.openai_model = settings.openai_model || ''
-}
-
-const openSettingsDialog = async () => {
-  settingsVisible.value = true
-  settingsLoading.value = true
-  try {
-    const settings = await getRuntimeSettings()
-    applyRuntimeSettings(settings)
-  } catch (error: any) {
-    message.error(error?.message || t('settings.messages.loadFailed'))
-  } finally {
-    settingsLoading.value = false
-  }
-}
-
-const saveSettingsNow = async () => {
-  settingsSaving.value = true
-  try {
-    const payload: RuntimeSettings = {
-      api_base_url: settingsForm.api_base_url,
-      vite_amap_web_key: settingsForm.vite_amap_web_key,
-      vite_amap_web_js_key: settingsForm.vite_amap_web_js_key,
-      google_maps_api_key: settingsForm.google_maps_api_key,
-      google_maps_proxy: settingsForm.google_maps_proxy,
-      xhs_cookie: settingsForm.xhs_cookie,
-      openai_api_key: settingsForm.openai_api_key,
-      openai_base_url: settingsForm.openai_base_url,
-      openai_model: settingsForm.openai_model,
+const onCtaClick = () => {
+  if (isLanding.value) {
+    const target = document.getElementById('trip-planner')
+    if (target) {
+      const y = target.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top: y, behavior: reduceMotion.value ? 'auto' : 'smooth' })
+      return
     }
-    const saved = await saveRuntimeSettings(payload)
-    applyRuntimeSettings(saved)
-    message.success(t('settings.messages.saved'))
-    settingsVisible.value = false
-  } catch (error: any) {
-    message.error(error?.message || t('settings.messages.saveFailed'))
-  } finally {
-    settingsSaving.value = false
   }
+  void router.push('/')
+}
+
+const onMobileCta = () => {
+  menuOpen.value = false
+  onCtaClick()
+}
+
+const closeMenu = () => {
+  menuOpen.value = false
+  menuTrigger.value?.focus()
+}
+
+const onThemeMenu = (info: { key: string | number }) => {
+  setThemePreference(String(info.key) as ThemePreference)
+}
+
+const onMotionMenu = (info: { key: string | number }) => {
+  setMotionPreference(String(info.key) as MotionPreference)
+}
+
+const openSettings = () => {
+  settingsOpen.value = true
+}
+
+const openSettingsFromMenu = async () => {
+  menuOpen.value = false
+  await nextTick()
+  window.setTimeout(() => {
+    settingsOpen.value = true
+  }, 220)
+}
+
+const closeSettings = async () => {
+  settingsOpen.value = false
+  await nextTick()
+  settingsTrigger.value?.querySelector('button')?.focus()
 }
 </script>
 
 <style scoped>
-.landing-navbar {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  z-index: 1030 !important;
-  min-height: 70px;
-  padding: 0 !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  border: none !important;
-  border-bottom: 1px solid transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  transition: background 0.3s;
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  height: var(--header-h);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
 }
 
-.landing-navbar:not(.navbar-transparent) {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  border-color: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+.app-header.is-solid {
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(16px);
 }
 
-.landing-navbar.navbar-transparent {
-  padding-top: 0 !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
+.app-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  height: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--page-gutter);
 }
 
-.landing-navbar *,
-.landing-navbar::before,
-.landing-navbar::after {
-  box-sizing: border-box;
-}
-
-.landing-navbar .container {
-  width: 100% !important;
-  max-width: 100vw !important;
-  min-height: 70px;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding-left: 20px;
-  padding-right: 20px;
-  box-sizing: border-box !important;
-}
-
-.landing-navbar .navbar-translate {
-  display: flex !important;
-  align-items: center !important;
-  min-height: 70px;
-  flex: 0 0 auto;
-}
-
-.landing-navbar .navbar-brand {
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1 !important;
-}
-
-.landing-burger {
-  display: none !important;
-}
-
-.landing-brand {
-  background: transparent !important;
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-h-md);
+  padding: 0;
   border: 0;
-  color: #f4f8fc !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.12em !important;
-  text-transform: uppercase;
-  font-size: 13px !important;
+  background: transparent;
+  color: var(--color-text);
   cursor: pointer;
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.landing-navbar-collapse {
-  display: flex !important;
-  justify-content: flex-end;
+.app-brand__route {
+  display: inline-flex;
   align-items: center;
+  width: 36px;
+}
+
+.app-brand__node {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.app-brand__line {
   flex: 1;
-  position: static !important;
-  transform: none !important;
-  width: auto !important;
-  height: auto !important;
-  background: transparent !important;
-  border: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
+  height: 2px;
+  margin: 0 2px;
+  background: var(--color-primary);
+  transform-origin: left center;
+  transition: transform var(--duration-fast) var(--ease-standard);
 }
 
-.landing-navbar-collapse::before,
-.landing-navbar-collapse::after {
-  display: none !important;
-  content: none !important;
-  background: transparent !important;
+.app-brand:hover .app-brand__line {
+  transform: translateX(2px);
 }
 
-.landing-nav {
-  display: flex;
+.app-brand__name {
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.app-header__nav {
+  display: none;
   align-items: center;
-  gap: 8px;
-  margin: 0 0 0 auto !important;
-  padding: 0;
-  list-style: none;
+  gap: var(--space-6);
+  margin-left: var(--space-4);
 }
 
-.landing-nav .nav-item {
-  margin: 0;
-  padding: 0;
+.app-header__link {
+  position: relative;
   display: inline-flex;
   align-items: center;
-}
-
-.landing-nav .nav-item .nav-link {
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1 !important;
-  opacity: 1 !important;
-}
-
-.landing-nav-btn {
-  border: 1.2px solid rgba(236, 243, 250, 0.24);
-  background: rgba(12, 23, 32, 0.56);
-  color: #ecf3fa;
-  border-radius: 999px;
-  padding: 0 12px;
-  min-height: 34px;
-  font-size: 12px;
+  min-height: var(--control-h-md);
+  color: var(--color-text-muted);
+  text-decoration: none;
   font-weight: 600;
-  letter-spacing: 0.04em;
+}
+
+.app-header__link[aria-current='page'] {
+  color: var(--color-text);
+}
+
+.app-header__link[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  width: 24px;
+  height: 2px;
+  background: var(--color-primary);
+  transform-origin: left center;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.app-icon-btn {
+  min-width: var(--control-h-md);
+  min-height: var(--control-h-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  text-transform: uppercase;
 }
 
-.settings-btn {
-  text-transform: none;
-  border: none !important;
-  background: none !important;
+.app-lang {
+  width: 112px;
 }
 
-.fog-toggle[aria-pressed='true'] {
-  border-color: rgba(215, 110, 66, 0.55);
-  background: rgba(215, 110, 66, 0.2);
-  color: #ffe3d6;
+.app-menu-trigger {
+  flex-direction: column;
+  gap: 4px;
+  display: none;
 }
 
-.landing-lang-item {
-  display: flex;
-  align-items: center;
+.app-menu-trigger__bar {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: currentColor;
 }
 
-.lang-select-nav {
-  width: 110px;
-}
-
-.lang-select-nav :deep(.ant-select-selector) {
-  height: 34px !important;
-  padding: 0 12px !important;
-  border: 1.2px solid rgba(236, 243, 250, 0.24) !important;
-  background: rgba(12, 23, 32, 0.56) !important;
-  border-radius: 999px !important;
-  display: flex !important;
-  align-items: center !important;
-}
-
-.lang-select-nav :deep(.ant-select-selection-item) {
-  line-height: 32px !important;
-  font-size: 12px !important;
-}
-
-.lang-select-nav :deep(.ant-select-selection-item),
-.lang-select-nav :deep(.ant-select-arrow) {
-  color: #ecf3fa !important;
-}
-
-.landing-cta {
-  min-height: 32px;
-  padding: 0 14px !important;
-  font-size: 12px !important;
-  border: none !important;
-  letter-spacing: 0.06em;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  margin: 0 !important;
-}
-
-.landing-navbar .btn {
-  margin: 0 !important;
-}
-
-@media (max-width: 991px) {
-  .landing-navbar {
-    min-height: 64px;
+@media (min-width: 768px) {
+  .app-header__nav {
+    display: flex;
   }
 
-  .landing-navbar .container {
-    padding-left: 14px;
-    padding-right: 14px;
-    min-height: 64px;
-  }
-
-  .landing-navbar .navbar-translate {
-    min-height: 64px;
-  }
-
-  .lang-select-nav {
-    width: 92px;
-  }
-
-  .landing-cta {
-    min-height: 34px;
-    padding: 0 10px !important;
-  }
-
-  .landing-nav {
-    gap: 6px;
+  .app-menu-trigger {
+    display: none;
   }
 }
 
-@media (max-width: 520px) {
-  .landing-navbar .container {
-    padding-left: 8px;
-    padding-right: 8px;
+@media (max-width: 767px) {
+  .app-header__nav,
+  :deep(.app-cta),
+  .app-lang,
+  .app-header__wide-only {
+    display: none;
   }
 
-  .landing-brand {
-    font-size: 10px !important;
-    letter-spacing: 0.05em !important;
-    max-width: 70px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .app-menu-trigger {
+    display: inline-flex;
   }
 
-  .landing-nav {
-    gap: 3px !important;
-  }
-
-  .lang-select-nav {
-    width: 68px !important;
-  }
-
-  .lang-select-nav :deep(.ant-select-selector) {
-    padding: 0 4px !important;
-  }
-
-  .landing-cta {
-    padding: 0 8px !important;
-    font-size: 10px !important;
-    min-height: 30px !important;
-    margin-right: 0 !important;
+  .app-header__actions {
+    gap: var(--space-1);
   }
 }
 
-@media (max-width: 400px) {
-  .landing-nav .nav-item:first-child {
-    display: none !important;
-  }
-
-  .lang-select-nav {
-    width: 62px !important;
-  }
-}
-
-.runtime-settings-form :deep(.ant-form-item) {
-  margin-bottom: 12px;
+html[data-motion='reduce'] .app-brand:hover .app-brand__line,
+html[data-motion='reduce'] .app-header__link[aria-current='page']::after {
+  transition: none;
 }
 </style>

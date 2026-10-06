@@ -5,12 +5,52 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0c1720" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-  <title>TripStar</title>
+  <meta name="theme-color" content="#F5F7F2" />
+  <title>TravelAI</title>
+  <script>
+    (function () {
+      var THEME_KEY = 'travelai.theme'
+      var MOTION_KEY = 'travelai.motion'
+      try {
+        var legacy = [
+          ['tripstar.theme', THEME_KEY],
+          ['tripstar.motion', MOTION_KEY],
+          ['tripstar-locale', 'travelai-locale'],
+          ['tripstar.runtime.api_base_url', 'travelai.runtime.api_base_url'],
+          ['tripstar.runtime.amap_web_js_key', 'travelai.runtime.amap_web_js_key'],
+          ['tripstar.runtime.google_maps_api_key', 'travelai.runtime.google_maps_api_key'],
+          ['tripstar.user_id', 'travelai.user_id']
+        ]
+        for (var i = 0; i < legacy.length; i += 1) {
+          if (!window.localStorage.getItem(legacy[i][1]) && window.localStorage.getItem(legacy[i][0])) {
+            window.localStorage.setItem(legacy[i][1], window.localStorage.getItem(legacy[i][0]))
+          }
+        }
+      } catch (error) {}
+      function read(key, allowed, fallback) {
+        try {
+          var value = window.localStorage.getItem(key)
+          return allowed.indexOf(value) !== -1 ? value : fallback
+        } catch (error) {
+          return fallback
+        }
+      }
+      var themePref = read(THEME_KEY, ['system', 'light', 'dark'], 'system')
+      var motionPref = read(MOTION_KEY, ['system', 'reduce', 'full'], 'system')
+      var prefersDark = false
+      var prefersReduce = false
+      try {
+        prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      } catch (error) {}
+      var theme = themePref === 'light' ? 'light' : themePref === 'dark' ? 'dark' : prefersDark ? 'dark' : 'light'
+      var motion = prefersReduce || motionPref === 'reduce' ? 'reduce' : 'full'
+      var root = document.documentElement
+      root.dataset.theme = theme
+      root.dataset.motion = motion
+      root.style.colorScheme = theme
+    })()
+  </script>
 </head>
 
 <body>

@@ -1,0 +1,89 @@
+html[data-theme] .ant-modal-content,
+html[data-theme] .ant-drawer-content,
+html[data-theme] .ant-dropdown-menu,
+html[data-theme] .ant-select-dropdown,
+html[data-theme] .ant-picker-dropdown {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+html[data-theme] .ant-modal-header,
+html[data-theme] .ant-drawer-header {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  border-bottom-color: var(--color-border);
+}
+
+html[data-theme] .ant-modal-title,
+html[data-theme] .ant-drawer-title {
+  color: var(--color-text);
+}
+
+html[data-theme] .ant-form-item-label > label {
+  color: var(--color-text);
+}
+
+html[data-motion='reduce'] .ant-dropdown,
+html[data-motion='reduce'] .ant-modal,
+html[data-motion='reduce'] .ant-drawer {
+  --antd-motion-duration-mid: 1ms;
+}
+
+.settings-drawer-root .ant-drawer-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-drawer-root .ant-drawer-body {
+  flex: 1;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.ant-modal-body,
+.chat-drawer__log,
+.mobile-nav-drawer .ant-drawer-body {
+  overscroll-behavior: contain;
+}
+
+.settings-drawer-root .ant-drawer-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+}
+
+@media (max-width: 767px) {
+  .settings-drawer-root .ant-drawer-content-wrapper {
+    width: 100vw !important;
+  }
+}
+
+.chat-drawer-root .ant-drawer-content {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+}
+
+.chat-drawer-root .ant-drawer-header {
+  padding: 16px 16px 12px;
+}
+
+.chat-drawer-root .ant-drawer-body {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-drawer-root--sheet .ant-drawer-content-wrapper {
+  height: 100dvh !important;
+  max-height: 100dvh;
+  width: 100vw !important;
+}
+
+.chat-drawer-root--sheet .ant-drawer-content {
+  height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom);
+}

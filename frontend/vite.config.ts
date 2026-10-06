@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
       }),
       {
         // 使用普通占位符，避免触发 Vite 对 %ENV% 的内置扫描告警。
-        name: 'tripstar-inject-amap-security-code',
+        name: 'travelai-inject-amap-security-code',
         transformIndexHtml(html: string) {
           return html.replaceAll('__AMAP_SECURITY_JS_CODE__', amapSecurityJsCode)
         },
@@ -39,10 +39,11 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks(id: string) {
+            // Shared interop must not live in a deferred map vendor chunk.
+            if (id.includes('commonjsHelpers')) return 'vendor-helpers'
             if (!id.includes('node_modules')) return
             if (id.includes('echarts') || id.includes('zrender')) return 'echarts'
             if (id.includes('html2canvas')) return 'html2canvas'
-            if (id.includes('swiper')) return 'swiper'
             if (id.includes('amap-jsapi-loader') || id.includes('@googlemaps')) return 'maps'
             // 精确匹配 Vue 运行时，避免把 ant-design-vue 也卷进 vue chunk
             if (/node_modules[\\/](vue|@vue|vue-router|vue-i18n)[\\/]/.test(id)) return 'vue'

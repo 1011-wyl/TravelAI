@@ -1,6 +1,6 @@
 """配置管理模块。
 
-在 TripStar 原有「环境变量 + 运行时覆盖（前端设置页热更新）」双层配置之上，
+在 TravelAI 原有「环境变量 + 运行时覆盖（前端设置页热更新）」双层配置之上，
 合并了 Hello-Travel 的工程化改进：
 
 - 统一结构化日志（``setup_logging`` / ``get_logger``），替代散落的 ``print``；
@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     )
 
     # 应用基本配置
-    app_name: str = "旅途星辰 TripStar"
+    app_name: str = "TravelAI"
     app_version: str = "2.2.0"
     debug: bool = False
     environment: str = "local"

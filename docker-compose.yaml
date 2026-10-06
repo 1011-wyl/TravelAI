@@ -8,8 +8,8 @@ services:
       args:
         VITE_AMAP_WEB_JS_KEY: ${VITE_AMAP_WEB_JS_KEY:-}
         VITE_AMAP_SECURITY_JS_CODE: ${VITE_AMAP_SECURITY_JS_CODE:-}
-    image: tripstar:latest
-    container_name: tripstar
+    image: travelai:latest
+    container_name: travelai
     ports:
       - "7860:7860"
     environment:

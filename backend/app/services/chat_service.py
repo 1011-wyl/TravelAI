@@ -16,7 +16,7 @@ from ..core.logging import get_logger
 logger = get_logger(__name__)
 
 # ============ System Prompt ============
-SYSTEM_PROMPT = """你是一个专业且贴心的私人旅行管家「旅途星辰AI」。
+SYSTEM_PROMPT = """你是一个专业且贴心的私人旅行管家「TravelAI」。
 
 你当前正在为用户提供关于一份 **已生成的旅行计划** 的答疑服务。
 用户可能会问你关于行程中的景点、酒店、餐饮、天气、交通、门票、费用等任何细节问题。

@@ -36,7 +36,7 @@ os.environ.setdefault("ENABLE_USER_MEMORY", "false")
 # 运行时配置隔离：指向一次性临时目录，避免读到开发者本地配置
 os.environ.setdefault(
     "RUNTIME_SETTINGS_FILE",
-    str(Path(tempfile.mkdtemp(prefix="tripstar-test-")) / "runtime_settings.json"),
+    str(Path(tempfile.mkdtemp(prefix="travelai-test-")) / "runtime_settings.json"),
 )
 
 from app import config as app_config  # noqa: E402

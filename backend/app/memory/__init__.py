@@ -8,7 +8,7 @@
 - 内存 / SQLite 两种存储，可通过环境变量切换
 
 合并说明：日志统一走 ``app.core.logging``，替代原先独立的
-``logging.getLogger("tripstar.memory")``，以便与全站日志格式、级别保持一致。
+``logging.getLogger("travelai.memory")``，以便与全站日志格式、级别保持一致。
 """
 
 from ..core.logging import get_logger
@@ -16,6 +16,6 @@ from .data_model import MemoryItem
 from .memory_manager import MemoryManager
 from .preference_extractor import PreferenceExtractor
 
-logger = get_logger("tripstar.memory")
+logger = get_logger("travelai.memory")
 
 __all__ = ["MemoryManager", "PreferenceExtractor", "MemoryItem", "logger"]

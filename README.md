@@ -15,7 +15,7 @@
 [🇨🇳 中文](README.md) | [🇺🇸 English](README_en.md) | [🇯🇵 日本語](README_ja.md)
 
 
-# 旅途星辰 - AI 旅行智能体
+# TravelAI - AI 旅行智能体
 **基于 HelloAgents 框架打造的多智能体协作文旅规划平台**
 </div>
 
@@ -28,7 +28,7 @@
 
 ## 项目简介
 
-**旅途星辰 (TripStar)** 是一个创新的 AI 文旅智能体应用，基于 HelloAgents 框架打造的多智能体协作文旅规划平台，旨在解决用户在规划旅行时面临的"信息过载"和"决策疲劳"问题。
+**TravelAI** 是一个创新的 AI 文旅智能体应用，基于 HelloAgents 框架打造的多智能体协作文旅规划平台，旨在解决用户在规划旅行时面临的"信息过载"和"决策疲劳"问题。
 
 有别于传统的旅游攻略网站，本项目采用了基于 **大语言模型 (LLM)** 和 **多智能体 (Multi-Agent)** 协作架构的创新模式。它能像一位经验丰富的人类旅行管家一样，全面考虑用户的个性化需求（偏好设置：交通方式、住宿风格、旅行兴趣、特殊需求等），自动搜索旅行信息、查询当地天气、精选酒店并规划最优景点路线，以**快速完成旅游攻略**。
 
@@ -77,7 +77,7 @@
 
 ## 工程化增强（v2.2.0 合并优化）
 
-本版本以 TripStar 为主干，合并了同框架项目 [LinJJ12/Hello-Travel](https://github.com/LinJJ12/Hello-Travel) 的工程化改进，并修复了主干中若干「必然报错」的实现缺陷。详见 [`MERGE_REPORT.md`](MERGE_REPORT.md)。
+本版本以 TravelAI 为主干，合并了同框架项目 [LinJJ12/Hello-Travel](https://github.com/LinJJ12/Hello-Travel) 的工程化改进，并修复了主干中若干「必然报错」的实现缺陷。详见 [`MERGE_REPORT.md`](MERGE_REPORT.md)。
 
 **修复的真实 Bug**
 
@@ -395,7 +395,7 @@ HTTP/WebSocket 端到端冒烟 **47/47 通过** ·
 ## 目录结构与关键代码导读
 
 ```text
-TripStar/
+TravelAI/
 ├── backend/                       # Python FastAPI 后端
 │   ├── app/
 │   │   ├── core/                  # 工程化基础设施 (logging / cache / retry / json_utils / job_store / constants)
@@ -476,6 +476,6 @@ TripStar/
 
 
 ## 🙏 致谢
-感谢 [linuxdo](https://linux.do/) 社区的交流、分享与反馈，让 TripStar 的迭代更高效，同时欢迎大家进群交流反馈
+感谢 [linuxdo](https://linux.do/) 社区的交流、分享与反馈，让 TravelAI 的迭代更高效，同时欢迎大家进群交流反馈
 <img width="431" height="411" alt="image" src="https://github.com/user-attachments/assets/118d46c0-a8e9-42fb-8110-c233fc4f6277" />
 

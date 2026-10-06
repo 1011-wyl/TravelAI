@@ -1,6 +1,6 @@
 """FastAPI 主应用。
 
-在 TripStar 原有实现之上合并了 Hello-Travel 的工程化改进：
+在 TravelAI 原有实现之上合并了 Hello-Travel 的工程化改进：
 
 - 用 ``lifespan`` 取代已废弃的 ``@app.on_event``；
 - 启动即初始化统一结构化日志（替代裸 ``print``）；
@@ -9,7 +9,7 @@
 - 非公开环境（``settings.docs_enabled`` 为假）自动关闭 ``/docs``、``/redoc``
   与 ``openapi.json``。
 
-保留了 TripStar 的两项部署适配：
+保留了 TravelAI 的两项部署适配：
 - ``intercept_proxy_path`` 中间件：兼容云平台在路径前拼接动态 ID 的代理；
 - 前端构建产物存在时，由后端直接托管 SPA（单容器部署）。
 """

@@ -8,12 +8,13 @@ import type {
   TripTaskEvent,
 } from '@/types'
 import { i18n } from '@/i18n'
+import { isMaskedSecret } from '@/utils/secretMask'
 
 const ENV_API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
 const ENV_AMAP_WEB_JS_KEY = import.meta.env.VITE_AMAP_WEB_JS_KEY ?? ''
-const RUNTIME_API_BASE_STORAGE_KEY = 'tripstar.runtime.api_base_url'
-const RUNTIME_AMAP_WEB_JS_KEY_STORAGE_KEY = 'tripstar.runtime.amap_web_js_key'
-const RUNTIME_GOOGLE_MAPS_API_KEY_STORAGE_KEY = 'tripstar.runtime.google_maps_api_key'
+const RUNTIME_API_BASE_STORAGE_KEY = 'travelai.runtime.api_base_url'
+const RUNTIME_AMAP_WEB_JS_KEY_STORAGE_KEY = 'travelai.runtime.amap_web_js_key'
+const RUNTIME_GOOGLE_MAPS_API_KEY_STORAGE_KEY = 'travelai.runtime.google_maps_api_key'
 const DEFAULT_RUNTIME_BACKEND_SETTINGS: BackendRuntimeSettings = {
   vite_amap_web_key: '',
   vite_amap_web_js_key: '',
@@ -25,7 +26,7 @@ const DEFAULT_RUNTIME_BACKEND_SETTINGS: BackendRuntimeSettings = {
   openai_model: '',
 }
 
-export const RUNTIME_SETTINGS_UPDATED_EVENT = 'tripstar:runtime-settings-updated'
+export const RUNTIME_SETTINGS_UPDATED_EVENT = 'travelai:runtime-settings-updated'
 const t = i18n.global.t
 
 const normalizeBaseUrl = (value: string | null | undefined): string => {
@@ -120,7 +121,7 @@ export const setRuntimeGoogleMapsApiKey = (value: string): string => {
 const getWsBaseUrl = (): string => getRuntimeApiBaseUrl().replace(/^http/i, 'ws').replace(/\/+$/, '')
 
 // ========== 用户记忆：本地生成并持久化匿名 user_id ==========
-const USER_ID_STORAGE_KEY = 'tripstar.user_id'
+const USER_ID_STORAGE_KEY = 'travelai.user_id'
 
 export const getOrCreateUserId = (): string => {
   if (typeof window === 'undefined') return ''
@@ -227,8 +228,7 @@ export async function getRuntimeSettings(): Promise<RuntimeSettings> {
   const apiBaseUrl = getRuntimeApiBaseUrl()
   const mapJsKey = getRuntimeMapJsKey() || backend.vite_amap_web_js_key
 
-  // 同步 Google Maps API Key 到 localStorage 供前端地图组件读取
-  if (backend.google_maps_api_key) {
+  if (backend.google_maps_api_key && !isMaskedSecret(backend.google_maps_api_key)) {
     setRuntimeGoogleMapsApiKey(backend.google_maps_api_key)
   }
 
@@ -263,8 +263,16 @@ export async function saveRuntimeSettings(settings: RuntimeSettings): Promise<Ru
   }
 
   const apiBaseUrl = setRuntimeApiBaseUrl(targetApiBaseUrl)
-  const mapJsKey = setRuntimeMapJsKey(settings.vite_amap_web_js_key || backend.vite_amap_web_js_key)
-  setRuntimeGoogleMapsApiKey(settings.google_maps_api_key || backend.google_maps_api_key)
+  const nextMapJsKey = normalizeText(settings.vite_amap_web_js_key)
+  const mapJsKey = isMaskedSecret(nextMapJsKey)
+    ? getRuntimeMapJsKey()
+    : setRuntimeMapJsKey(nextMapJsKey)
+  const nextGoogleKey = normalizeText(settings.google_maps_api_key)
+  if (!isMaskedSecret(nextGoogleKey)) {
+    setRuntimeGoogleMapsApiKey(nextGoogleKey)
+  } else if (backend.google_maps_api_key && !isMaskedSecret(backend.google_maps_api_key)) {
+    setRuntimeGoogleMapsApiKey(backend.google_maps_api_key)
+  }
 
   emitRuntimeSettingsUpdated()
 

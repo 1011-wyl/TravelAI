@@ -1,0 +1,77 @@
+.app-atmosphere__glow {
+  animation: atlas-breathe 18s var(--ease-standard) infinite alternate;
+}
+
+@keyframes atlas-breathe {
+  from {
+    transform: translate3d(-1.2%, -0.8%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(1.2%, 0.9%, 0) scale(1.03);
+  }
+}
+
+.motion-lift {
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.motion-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+.motion-press:active {
+  transform: scale(0.985);
+  transition-duration: var(--duration-instant);
+}
+
+.motion-enter {
+  animation: atlas-enter var(--duration-slow) var(--ease-standard) both;
+}
+
+@keyframes atlas-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+html[data-motion='reduce'] {
+  scroll-behavior: auto;
+}
+
+html[data-motion='reduce'] .app-atmosphere__glow,
+html[data-motion='reduce'] .motion-enter {
+  animation: none !important;
+}
+
+html[data-motion='reduce'] .motion-lift,
+html[data-motion='reduce'] .motion-lift:hover,
+html[data-motion='reduce'] .motion-press:active {
+  transform: none !important;
+  transition: background-color 1ms linear, border-color 1ms linear, color 1ms linear, box-shadow 1ms linear !important;
+}
+
+html[data-motion='reduce'] .route-fade-enter-active,
+html[data-motion='reduce'] .route-fade-leave-active {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion='full']) {
+    scroll-behavior: auto;
+  }
+
+  html:not([data-motion='full']) .app-atmosphere__glow {
+    animation: none !important;
+  }
+}

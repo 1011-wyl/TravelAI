@@ -1,6 +1,6 @@
 """高德 REST 服务层的单元测试（monkeypatch httpx，不触网）。
 
-覆盖合并后的 ``AmapService``（原 TripStar 版本是返回空值的 MCP 桩）：
+覆盖合并后的 ``AmapService``（原 TravelAI 版本是返回空值的 MCP 桩）：
 - 未配置 Key 时优雅降级为空结果，而不是抛错；
 - POI / 天气 / 地理编码 / 路线 / POI 详情 的解析与缓存；
 - 接口返回失败状态码时不崩溃。

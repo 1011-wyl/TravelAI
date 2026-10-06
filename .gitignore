@@ -27,6 +27,7 @@ Thumbs.db
 # ---- 智能体工作态与验证截图（非产品代码）----
 .workbuddy-ai/
 .verify/
+docs/qa/
 
 # ---- 合并期间的临时与备份目录 ----
 _ts_tmp/

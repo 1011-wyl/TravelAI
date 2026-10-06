@@ -3,7 +3,7 @@
 基于 Spider_XHS 项目的 JS 签名引擎，通过 PyExecJS 调用本地 Node.js 执行签名 JS
 生成 x-s, x-t, x-s-common, x-b3-traceid, x-xray-traceid 等请求头字段
 
-合并说明（相对 TripStar 原实现）：原代码在 **模块导入时** 就编译签名 JS，
+合并说明（相对 TravelAI 原实现）：原代码在 **模块导入时** 就编译签名 JS，
 一旦运行环境缺少 Node.js 或 PyExecJS 不可用，``import app.api.main`` 会直接
 失败——即整个后端（含完全不依赖小红书的行程规划、设置页等）都无法启动。
 

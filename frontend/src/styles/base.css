@@ -1,0 +1,172 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  background: var(--color-canvas);
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow-x: hidden;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: var(--weight-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100%;
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: var(--weight-heading);
+  color: inherit;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  line-height: var(--leading-h1);
+}
+
+h2 {
+  font-size: var(--text-h2);
+  line-height: var(--leading-h2);
+}
+
+h3 {
+  font-size: var(--text-h3);
+  line-height: var(--leading-h3);
+}
+
+p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+a {
+  color: var(--color-sky);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary) 75%, transparent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+}
+
+/* Accessible text stays in the accessibility tree without occupying layout. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: var(--z-skip);
+  transform: translateY(-200%);
+  padding: var(--space-2) var(--space-4);
+  min-height: var(--control-h-md);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  box-shadow: var(--shadow-2);
+  text-decoration: none;
+  font-size: var(--text-body-s);
+  font-weight: 600;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.app-shell {
+  position: relative;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.app-shell__main {
+  position: relative;
+  z-index: 1;
+}
+
+.app-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-base);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.app-atmosphere__glow {
+  position: absolute;
+  inset: -8%;
+  background:
+    radial-gradient(ellipse 46% 38% at 12% 8%, var(--color-glow-primary), transparent 62%),
+    radial-gradient(ellipse 42% 36% at 88% 92%, var(--color-glow-accent), transparent 64%),
+    radial-gradient(ellipse 30% 24% at 70% 18%, var(--color-glow-sky), transparent 70%);
+  transform-origin: 50% 50%;
+}
+
+.app-atmosphere__topo {
+  position: absolute;
+  inset: 0;
+  color: var(--color-contour);
+  background-color: currentColor;
+  -webkit-mask: url('../assets/topographic-lines.svg') center / 420px 420px repeat;
+  mask: url('../assets/topographic-lines.svg') center / 420px 420px repeat;
+}

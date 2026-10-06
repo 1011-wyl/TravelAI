@@ -1,6 +1,6 @@
 """高德地图服务封装 - 直接 HTTP REST API 实现。
 
-合并说明：TripStar 原实现的 ``AmapService`` 是 MCP 桩代码——``search_poi`` /
+合并说明：TravelAI 原实现的 ``AmapService`` 是 MCP 桩代码——``search_poi`` /
 ``get_weather`` / ``plan_route`` / ``geocode`` 全部返回空列表或空字典，导致
 ``/api/map/*`` 系列端点实际不可用；``/api/map/health`` 还访问了并不存在的
 ``service.mcp_tool`` 属性。这里移植 Hello-Travel 的真实 REST 实现并做了适配：
