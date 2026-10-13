@@ -191,6 +191,4 @@ README 中的界面图由当前构建和仓库内的标准演示数据生成，�
 > [!NOTE]
 > 规划任务状态与 TTL 缓存目前保存在进程内。生产环境应保持单 worker；仓库提供的 `start.sh` 已按这一约束配置。
 
-## License
 
-本项目依据 [GNU General Public License v2.0](LICENSE) 开源。
